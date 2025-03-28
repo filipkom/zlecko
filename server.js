@@ -7,15 +7,12 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Dane firm
 let daneFirm = [];
 
-// Wczytaj dane firm przy starcie
 async function loadFirmy() {
     const workbook = new ExcelJS.Workbook();
     await workbook.xlsx.readFile(path.join(__dirname, 'public', 'dane_firm.xlsx'));
@@ -32,8 +29,7 @@ async function loadFirmy() {
     });
 }
 
-// Endpointy
-app.get('/api/firmy', async (req, res) => {
+app.get('/api/firmy', (req, res) => {
     const { nazwa } = req.query;
     
     if(!nazwa || nazwa.length < 3) {
@@ -58,7 +54,6 @@ app.post('/api/generuj-excel', async (req, res) => {
         await workbook.xlsx.readFile(path.join(__dirname, 'public', 'szablon.xlsx'));
         const worksheet = workbook.getWorksheet(1);
 
-        // Wprowadź dane do szablonu
         worksheet.getCell('A5').value = firma.nazwa;
         worksheet.getCell('A6').value = firma.adres;
         worksheet.getCell('A7').value = firma.nip;
@@ -74,7 +69,15 @@ app.post('/api/generuj-excel', async (req, res) => {
     }
 });
 
-// Inicjalizacja serwera
+app.use((req, res) => {
+    res.status(404).send('Nie znaleziono strony');
+});
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Wystąpił błąd serwera');
+});
+
 loadFirmy()
     .then(() => {
         app.listen(port, () => {
