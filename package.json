@@ -1,0 +1,15 @@
+{
+  "name": "zlecenie-generator",
+  "version": "1.0.0",
+  "description": "Generator zleceń Excel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "xlsx": "^0.17.0"
+  }
+}
