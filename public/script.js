@@ -5,19 +5,28 @@ const companyInput = document.getElementById("companyInput");
 companyInput.addEventListener("input", function() {
     const input = this.value.toLowerCase();
     suggestionsDiv.innerHTML = "";
+    
     if (input.length >= 3) {
-        const filteredCompanies = companies.filter(company =>
-            company.toLowerCase().startsWith(input)
-        );
-        filteredCompanies.forEach(company => {
+        fetch('/api/firmy', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ nazwa: input }),
+        })
+        .then(response => response.json())
+        .then(data => {
             const div = document.createElement("div");
-            div.textContent = company;
+            div.textContent = data.nazwa;
             div.onclick = function() {
-                companyInput.value = company;
+                companyInput.value = data.nazwa;
+                document.getElementById("companyAddress").value = data.adres;
+                document.getElementById("companyNIP").value = data.nip;
                 suggestionsDiv.innerHTML = "";
             };
             suggestionsDiv.appendChild(div);
-        });
+        })
+        .catch(error => console.error("Błąd:", error));
     }
 });
 

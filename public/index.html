@@ -7,8 +7,11 @@
 </head>
 <body>
     <input type="text" id="companyInput" placeholder="Wpisz nazwę firmy">
-    <div id="suggestions"></div>
-    <button onclick="generateExcelFromTemplate()">Generuj</button>
+<div id="suggestions"></div>
+<input type="text" id="companyAddress" placeholder="Adres firmy" readonly>
+<input type="text" id="companyNIP" placeholder="NIP firmy" readonly>
+<button onclick="generateExcelFromTemplate()">Generuj</button>
+
 
     <script src="script.js"></script>
 </body>
