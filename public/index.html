@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Generator Excel</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
 </head>
 <body>
     <input type="text" id="companyInput" placeholder="Wpisz nazwę firmy">
-<div id="suggestions"></div>
-<input type="text" id="companyAddress" placeholder="Adres firmy" readonly>
-<input type="text" id="companyNIP" placeholder="NIP firmy" readonly>
-<button onclick="generateExcelFromTemplate()">Generuj</button>
-
-
+    <div id="suggestions"></div>
+    <button onclick="generateExcelFromTemplate()">Generuj</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

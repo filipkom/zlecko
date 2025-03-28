@@ -1,4 +1,3 @@
-const companies = ["Apple", "Microsoft", "Google", "Amazon", "Facebook"];
 const suggestionsDiv = document.getElementById("suggestions");
 const companyInput = document.getElementById("companyInput");
 
@@ -20,8 +19,6 @@ companyInput.addEventListener("input", function() {
             div.textContent = data.nazwa;
             div.onclick = function() {
                 companyInput.value = data.nazwa;
-                document.getElementById("companyAddress").value = data.adres;
-                document.getElementById("companyNIP").value = data.nip;
                 suggestionsDiv.innerHTML = "";
             };
             suggestionsDiv.appendChild(div);
