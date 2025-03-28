@@ -7,16 +7,42 @@
         .suggestion-item {
             cursor: pointer;
             padding: 5px;
+            border-bottom: 1px solid #ccc;
         }
+        
         .suggestion-item:hover {
             background-color: #f0f0f0;
         }
+        
+        #suggestions {
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 5px;
+        }
+        
+        input[type="text"] {
+            width: 300px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        
     </style>
 </head>
 <body>
+    <h1>Generator Zleceń</h1>
+    
     <input type="text" id="companyInput" placeholder="Wpisz nazwę firmy">
+    
     <div id="suggestions"></div>
+    
     <button onclick="generateExcelFromTemplate()">Generuj</button>
+    
     <script src="script.js"></script>
 </body>
 </html>
