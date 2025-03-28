@@ -2,28 +2,24 @@ const suggestionsDiv = document.getElementById("suggestions");
 const companyInput = document.getElementById("companyInput");
 
 companyInput.addEventListener("input", function() {
-    const input = this.value.toLowerCase();
+    const input = this.value;
     suggestionsDiv.innerHTML = "";
     
-    if (input.length >= 3) {
-        fetch('/api/firmy', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ nazwa: input }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            const div = document.createElement("div");
-            div.textContent = data.nazwa;
-            div.onclick = function() {
-                companyInput.value = data.nazwa;
-                suggestionsDiv.innerHTML = "";
-            };
-            suggestionsDiv.appendChild(div);
-        })
-        .catch(error => console.error("Błąd:", error));
+    if(input.length >= 3) {
+        fetch(`/api/firmy?nazwa=${encodeURIComponent(input)}`)
+            .then(response => response.json())
+            .then(firmy => {
+                firmy.forEach(firma => {
+                    const div = document.createElement("div");
+                    div.className = "suggestion-item";
+                    div.textContent = firma.nazwa;
+                    div.onclick = () => {
+                        companyInput.value = firma.nazwa;
+                        suggestionsDiv.innerHTML = "";
+                    };
+                    suggestionsDiv.appendChild(div);
+                });
+            });
     }
 });
 
