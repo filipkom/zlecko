@@ -7,7 +7,10 @@ companyInput.addEventListener("input", function() {
     
     if(input.length >= 3) {
         fetch(`/api/firmy?nazwa=${encodeURIComponent(input)}`)
-            .then(response => response.json())
+            .then(response => {
+                if(!response.ok) throw new Error('Błąd sieci');
+                return response.json();
+            })
             .then(firmy => {
                 firmy.forEach(firma => {
                     const div = document.createElement("div");
@@ -19,7 +22,8 @@ companyInput.addEventListener("input", function() {
                     };
                     suggestionsDiv.appendChild(div);
                 });
-            });
+            })
+            .catch(error => console.error("Błąd:", error));
     }
 });
 
