@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const XLSX = require('xlsx');
+const ExcelJS = require('exceljs');
 const path = require('path');
 
 const app = express();
@@ -15,21 +15,25 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.post('/api/generuj-excel', (req, res) => {
+app.post('/api/generuj-excel', async (req, res) => {
   const { nazwa } = req.body;
   
   try {
-    const workbook = XLSX.readFile(path.join(__dirname, 'public', 'szablon.xlsx'));
-    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.readFile(path.join(__dirname, 'public', 'szablon.xlsx'));
+    const worksheet = workbook.getWorksheet(1);
 
     // Wprowadź nazwę firmy do komórki A5
-    XLSX.utils.sheet_add_aoa(worksheet, [[nazwa]], { origin: 'A5' });
+    const cell = worksheet.getCell('A5');
+    const originalStyle = cell.style;
+    cell.value = nazwa;
+    cell.style = originalStyle;
 
-    const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
-
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', `attachment; filename=Zlecenie_${nazwa}.xlsx`);
-    res.type('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.send(buffer);
+
+    await workbook.xlsx.write(res);
+    res.end();
   } catch (error) {
     console.error("Błąd podczas generowania pliku Excel:", error);
     res.status(500).json({ message: 'Wystąpił błąd podczas generowania pliku Excel' });
